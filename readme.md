@@ -1,6 +1,6 @@
 # Proyecto Aurelion
 
-Breve descripción del flujo 80/20 para entender rápido el propósito del repositorio.
+
 
 ## Objetivo
 
