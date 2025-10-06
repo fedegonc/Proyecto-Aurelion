@@ -79,8 +79,8 @@ if opcion == "🏠 Resumen General":
     
     with col1:
         st.subheader("🏙️ Top 3 Ciudades")
-        ventas_ciudad = analizador.ventas_por_ciudad().head(3)
-        for ciudad, monto in ventas_ciudad.items():
+        top_ciudades = ventas_ciudad.head(3)
+        for ciudad, monto in top_ciudades.items():
             st.write(f"**{ciudad}:** ${monto:,.0f}")
     
     with col2:
@@ -94,9 +94,8 @@ elif opcion == "🏙️ Ventas por Ciudad":
     
     resultado = analizador.ventas_por_ciudad()
     
-    # Calcular ticket promedio por ciudad
-    df_master = loader.obtener_tabla_maestra()
-    ventas_agregadas = df_master.groupby(['ciudad', 'id_venta'])['importe'].sum().reset_index()
+    # Calcular ticket promedio por ciudad (usando df ya cargado)
+    ventas_agregadas = analizador.df.groupby(['ciudad', 'id_venta'])['importe'].sum().reset_index()
     ticket_promedio = ventas_agregadas.groupby('ciudad')['importe'].mean().sort_values(ascending=False)
     
     # Gráficos lado a lado
@@ -179,9 +178,8 @@ elif opcion == "👥 Segmentación de Clientes VIP":
         how='left'
     )
     
-    # Obtener productos comprados por cada cliente
-    df_master = loader.obtener_tabla_maestra()
-    productos_por_cliente = df_master.groupby('id_cliente')['nombre_producto'].apply(
+    # Obtener productos comprados por cada cliente (usando df ya cargado)
+    productos_por_cliente = analizador.df.groupby('id_cliente')['nombre_producto'].apply(
         lambda x: ', '.join(x.unique()[:3]) + ('...' if len(x.unique()) > 3 else '')
     ).reset_index()
     productos_por_cliente.columns = ['id_cliente', 'productos_comprados']

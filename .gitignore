@@ -21,7 +21,15 @@ venv/
 data/processed/
 data/interim/
 reports/
+models/
+
+# Streamlit cache
+.streamlit/
 
 # System files
 Thumbs.db
 .DS_Store
+
+# Archivos temporales
+*.log
+*.tmp
