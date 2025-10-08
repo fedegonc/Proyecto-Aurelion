@@ -10,6 +10,12 @@ class AnalizadorVentas:
     
     def __init__(self, df_master):
         self.df = df_master
+    
+    def _calcular_ventas_totales(self):
+        """Calcula importe total por venta (método auxiliar)."""
+        ventas = self.df.groupby('id_venta')['importe'].sum().reset_index()
+        ventas.rename(columns={'importe': 'importe_total_venta'}, inplace=True)
+        return ventas
         
     def ventas_por_ciudad(self):
         """
@@ -37,9 +43,7 @@ class AnalizadorVentas:
         Análisis 3: Segmentación de clientes por valor promedio (AOV).
         Métrica clave: ¿Quiénes son nuestros clientes VIP?
         """
-        # Calcular importe total por venta
-        ventas_totales = self.df.groupby('id_venta')['importe'].sum().reset_index()
-        ventas_totales.rename(columns={'importe': 'importe_total_venta'}, inplace=True)
+        ventas_totales = self._calcular_ventas_totales()
         
         # Unir con información de cliente
         df_aov = ventas_totales.merge(
@@ -66,9 +70,7 @@ class AnalizadorVentas:
         Análisis 4: Distribución de transacciones por medio de pago.
         Métrica clave: ¿Cómo prefieren pagar nuestros clientes?
         """
-        # Calcular importe total por venta
-        ventas_totales = self.df.groupby('id_venta')['importe'].sum().reset_index()
-        ventas_totales.rename(columns={'importe': 'importe_total_venta'}, inplace=True)
+        ventas_totales = self._calcular_ventas_totales()
         
         # Unir con medio de pago
         df_pagos = ventas_totales.merge(
